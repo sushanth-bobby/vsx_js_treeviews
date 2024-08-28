@@ -18,19 +18,19 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "package-explorer",
-					"title": "Package Explorer",
+					"id": "treeview-examples",
+					"title": "Tree view Examples",
 					"icon": "media/dep.svg"
 				}
 			]
 		},
 		"views": {
-			"package-explorer": [
+			"treeview-examples": [
 				{
-					"id": "nodeDependencies",
-					"name": "Node Dependencies",
+					"id": "treeView1",
+					"name": "Tree View 1",
 					"icon": "media/dep.svg",
-					"contextualTitle": "Package Explorer"
+					"contextualTitle": "Example 1"
 				},
 				{
 					"id": "testView",
