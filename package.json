@@ -33,8 +33,9 @@
 					"contextualTitle": "Example 1"
 				},
 				{
-					"id": "testView",
-					"name": "Test Vieww"
+					"id": "treeView2",
+					"name": "Tree View 2",
+          "contextualTitle": "Example 2"
 				},
 				{
 					"id": "testViewDragAndDrop",

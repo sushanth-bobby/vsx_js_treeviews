@@ -2,7 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
-const DataProvider = require("./src/dataProvider.js");
+const DataProvider = require("./src/dataProvider.js"); //Tree View 1
+const tv2_cars = require("./src/treeview2.js"); //Tree View 2
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -29,11 +30,17 @@ function activate(context) {
 
 	//treeView1
 	let tvData1 = new DataProvider();
-	let view = vscode.window.createTreeView("treeView1", {
-		treeDataProvider: tvData1,
+	let tv1 = vscode.window.createTreeView("treeView1", {
+		treeDataProvider: tvData1
 	  });
-	context.subscriptions.push(view);
+	context.subscriptions.push(tv1);
 	
+	//treeView2
+	let tvData2 = new tv2_cars();
+	let tv2 = vscode.window.createTreeView("treeView2", {
+		treeDataProvider: tvData2,
+	  });
+	context.subscriptions.push(tv2);
 
 	
 }
