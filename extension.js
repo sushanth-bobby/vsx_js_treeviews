@@ -42,6 +42,11 @@ function activate(context) {
 	  });
 	context.subscriptions.push(tv2);
 
+	vscode.commands.registerCommand('myTreeView.itemClick', (node) => {
+		const parentLabel = node.parentLabel ? node.parentLabel : 'None';
+		vscode.window.showInformationMessage(`Clicked Node: ${node.label}, Parent: ${parentLabel}`);
+	});
+	
 	
 }
 

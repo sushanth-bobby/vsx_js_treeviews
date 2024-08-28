@@ -61,7 +61,11 @@
     "commands": [{
       "command": "js-treeviews.helloWorld",
       "title": "Hello World"
-    }]
+    },
+	{
+		"command": "myTreeView.itemClick",
+		"title": "Click Node"		
+	}]
   },
   "scripts": {
     "lint": "eslint .",
