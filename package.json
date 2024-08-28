@@ -1,0 +1,79 @@
+{
+  "name": "js-treeviews",
+  "displayName": "js_TreeViews",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+		"onLanguage:json",
+		"onLanguage:jsonc"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "package-explorer",
+					"title": "Package Explorer",
+					"icon": "media/dep.svg"
+				}
+			]
+		},
+		"views": {
+			"package-explorer": [
+				{
+					"id": "nodeDependencies",
+					"name": "Node Dependencies",
+					"icon": "media/dep.svg",
+					"contextualTitle": "Package Explorer"
+				},
+				{
+					"id": "testView",
+					"name": "Test Vieww"
+				},
+				{
+					"id": "testViewDragAndDrop",
+					"name": "Test View Drag and Drop"
+				}        
+			],
+			"explorer": [
+				{
+					"id": "jsonOutline",
+					"name": "Json Outline",
+					"when": "jsonOutlineEnabled"
+				},
+				{
+					"id": "ftpExplorer",
+					"name": "FTP Explorerr"
+				},
+				{
+					"id": "fileExplorer",
+					"name": "File Explorerr"
+				}
+			]
+		},
+    "commands": [{
+      "command": "js-treeviews.helloWorld",
+      "title": "Hello World"
+    }]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.92.0",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0"
+  }
+}
