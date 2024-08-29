@@ -35,8 +35,18 @@
 				{
 					"id": "treeView2",
 					"name": "Tree View 2",
-          "contextualTitle": "Example 2"
+          			"contextualTitle": "Example 2"
 				},
+				{
+					"id": "treeView3",
+					"name": "JSON Tree View 3",
+          			"contextualTitle": "Example 3"
+				},
+				{
+					"id": "treeView4",
+					"name": "Tree View 4 - Open File",
+          			"contextualTitle": "Example 4"
+				},				
 				{
 					"id": "testViewDragAndDrop",
 					"name": "Test View Drag and Drop"
@@ -64,6 +74,10 @@
     },
 	{
 		"command": "myTreeView.itemClick",
+		"title": "Click Node"		
+	},
+	{
+		"command": "myTreeView.itemClickOpen",
 		"title": "Click Node"		
 	}]
   },

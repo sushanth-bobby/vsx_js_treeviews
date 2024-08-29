@@ -1,9 +1,13 @@
+const path = require('path');
+
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
 const DataProvider = require("./src/dataProvider.js"); //Tree View 1
 const tv2_cars = require("./src/treeview2.js"); //Tree View 2
+const tv3_json = require("./src/treeview3.js"); //Tree View 3
+const tv4_json = require("./src/treeview4.js"); //Tree View 4
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -46,8 +50,34 @@ function activate(context) {
 		const parentLabel = node.parentLabel ? node.parentLabel : 'None';
 		vscode.window.showInformationMessage(`Clicked Node: ${node.label}, Parent: ${parentLabel}`);
 	});
+
+	//treeView3
+	let tvData3 = new tv3_json(path.join(__dirname, 'data', 'tv3_data.json'));
+	let tv3 = vscode.window.createTreeView("treeView3", {
+		treeDataProvider: tvData3,
+	  });
+	context.subscriptions.push(tv3);
 	
-	
+	//treeView4
+	let tvData4 = new tv4_json(path.join(__dirname, 'data', 'tv4_data.json'));
+	let tv4 = vscode.window.createTreeView("treeView4", {
+		treeDataProvider: tvData4,
+	  });
+	context.subscriptions.push(tv4);
+
+	vscode.commands.registerCommand('myTreeView.itemClickOpen', (node) => {
+		if (node.filePath) {
+			vscode.workspace.openTextDocument(node.filePath)
+				.then(document => vscode.window.showTextDocument(document))
+				// .catch(err => vscode.window.showErrorMessage(`Failed to open file: ${err.message}`));
+				// Note: vscode doesn't have standard .catch method, so got to use .then chaining to handle errors
+				//       'undefined' is passed for the first argument(success handler), so it skips directly to error handling part				
+				.then(undefined, error => vscode.window.showErrorMessage(`Failed to open file: ${error.message}`));
+		} else {
+			vscode.window.showInformationMessage(`File path not available for: ${node.label}`);
+		}
+	});
+
 }
 
 // This method is called when your extension is deactivated
