@@ -46,6 +46,16 @@
 					"id": "treeView4",
 					"name": "Tree View 4 - Open File",
           			"contextualTitle": "Example 4"
+				},
+				{
+					"id": "treeView5",
+					"name": "Tree View 5 - User Files",
+          			"contextualTitle": "Example 5"
+				},
+				{
+					"id": "treeView6",
+					"name": "Tree View 6 - Get From API",
+          			"contextualTitle": "Example 6"
 				},				
 				{
 					"id": "testViewDragAndDrop",

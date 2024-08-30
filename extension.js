@@ -1,4 +1,5 @@
 const path = require('path');
+const os = require('os');
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -8,6 +9,7 @@ const DataProvider = require("./src/dataProvider.js"); //Tree View 1
 const tv2_cars = require("./src/treeview2.js"); //Tree View 2
 const tv3_json = require("./src/treeview3.js"); //Tree View 3
 const tv4_json = require("./src/treeview4.js"); //Tree View 4
+const tv5_userfiles = require("./src/treeview5.js"); //Tree View 5
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -77,6 +79,15 @@ function activate(context) {
 			vscode.window.showInformationMessage(`File path not available for: ${node.label}`);
 		}
 	});
+
+	//treeView5
+	const userDirectory = path.join('C:\\Users', os.userInfo().username, 'Favorites', 'Downloads')
+	console.log(userDirectory)
+	let tvData5 = new tv5_userfiles(userDirectory);
+	let tv5 = vscode.window.createTreeView("treeView5", {
+		treeDataProvider: tvData5,
+	  });
+	context.subscriptions.push(tv5);
 
 }
 
