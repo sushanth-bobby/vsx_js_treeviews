@@ -1,5 +1,11 @@
 const path = require('path');
 const os = require('os');
+const https = require('https')
+const axios = require('axios').create({
+    httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+    })
+})
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -10,6 +16,9 @@ const tv2_cars = require("./src/treeview2.js"); //Tree View 2
 const tv3_json = require("./src/treeview3.js"); //Tree View 3
 const tv4_json = require("./src/treeview4.js"); //Tree View 4
 const tv5_userfiles = require("./src/treeview5.js"); //Tree View 5
+const tv6_api = require("./src/treeview6.js"); //Tree View 6
+const tv7_poll = require("./src/treeview7.js"); //Tree View 7
+const tv8_pollAPI = require("./src/treeview8.js"); //Tree View 8
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -88,6 +97,60 @@ function activate(context) {
 		treeDataProvider: tvData5,
 	  });
 	context.subscriptions.push(tv5);
+
+	//treeView6
+	let tvData6 = new tv6_api('arrjson1');
+	let tv6 = vscode.window.createTreeView("treeView6", {
+		treeDataProvider: tvData6,
+	  });
+	context.subscriptions.push(tv6);
+
+	vscode.commands.registerCommand('treeview6.urlClick', async (item) => {
+		try {
+			let response = await axios.get(item.url);
+			let data = response.data;
+			console.log(`treeview6 = ${JSON.stringify(response.headers)}`)
+			let contentType = response['headers']['content-type']
+			console.log(`contentType = ${contentType}`)
+			let lang;
+			if(contentType.includes('json')){
+				lang = 'json'
+				data = JSON.stringify(data, null, 2)
+			}else{
+				lang = 'text'
+			}
+			const document = await vscode.workspace.openTextDocument({				
+				content: data,
+				language: lang
+			});
+
+			await vscode.window.showTextDocument(document);
+		} catch (error) {
+			vscode.window.showErrorMessage(`Failed to fetch data: ${error.message}`);
+		}
+	});
+
+	//treeView7
+	let tvData7 = new tv7_poll();
+	let tv7 = vscode.window.createTreeView("treeView7", {
+		treeDataProvider: tvData7,
+		});
+	setInterval(() => {
+		tvData7.updateStatuses();
+	}, 2000);		
+	context.subscriptions.push(tv7);
+	
+
+	//treeView8
+	let tvData8 = new tv8_pollAPI('poll');
+	let tv8 = vscode.window.createTreeView("treeView8", {
+		treeDataProvider: tvData8,
+	  });
+	context.subscriptions.push(tv8);
+	setInterval(() => {
+		tvData8.updateStatuses();
+	}, 20000);		
+
 
 }
 
