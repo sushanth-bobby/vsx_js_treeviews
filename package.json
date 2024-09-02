@@ -68,6 +68,11 @@
           "contextualTitle": "Example 8"
         },
         {
+          "id": "treeView9",
+          "name": "Tree View 9 - File EXplorer",
+          "contextualTitle": "Example 9"
+        },
+        {
           "id": "testViewDragAndDrop",
           "name": "Test View Drag and Drop"
         }
@@ -104,8 +109,22 @@
       {
         "command": "treeview6.urlClick",
         "title": "Click Node"
+      },
+      {
+        "command": "treeView9.postDocument",
+        "title": "POST"
       }      
-    ]
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "treeView9.postDocument",
+          "when": "view == treeView9 && viewItem == editorItem",
+          "group": "inline"
+        }
+      ]
+    }
+
   },
   "scripts": {
     "lint": "eslint .",
