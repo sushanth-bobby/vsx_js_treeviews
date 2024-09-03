@@ -32,12 +32,35 @@
           "contextualTitle": "Example 9"
         },
         {
+          "id": "treeView10",
+          "name": "Tree View 10 - Tree Item Colors",
+          "contextualTitle": "Example 10"
+        },
+        {
+          "id": "treeView11",
+          "name": "Tree View 11 - Custom FileType Icons",
+          "contextualTitle": "Example 11"
+        },
+        {
           "id": "testViewDragAndDrop",
           "name": "Test View Drag and Drop"
         }
       ],
       "explorer": [ ]
     },
+    "fileDecorations": [
+      {
+        "id": "statusDecoration",
+        "name": "Status Decoration"
+      }
+    ],
+    "iconThemes": [
+      {
+          "id": "myIconTheme",
+          "label": "My Icon Theme",
+          "path": "./themes/myIconTheme.json"
+      }
+    ],
     "commands": [
       {
         "command": "treeView9.postDocument",

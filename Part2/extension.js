@@ -1,3 +1,4 @@
+/*
 const path = require('path');
 const os = require('os');
 const https = require('https')
@@ -6,13 +7,26 @@ const axios = require('axios').create({
         rejectUnauthorized: false
     })
 })
+ */
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+
+// Local Requires
 const tv9_fileExplorer = require("./src/treeview9.js"); //Tree View 9
 const { uppercaseDocument, uppercaseSelection } = require('./src/Doc_RightClickUpperCase.js');
+
+// Destructuring
+const {StatusTreeViewProvider: tv10_tiColor
+	, FileDecorationProvider: tv10_fdp} = require("./src/treeview10.js"); //Tree View 10
+// (OR) Below is the alternative approach
+// const c10 = require('./src/treeview10.js');
+// var tv10_fdp = new c10.FileDecorationProvider();
+// var tv10_tiColor = new c10.StatusTreeViewProvider();
+
+const tv11_icons = require("./src/treeview11.js"); //Tree View 11
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -75,6 +89,27 @@ function activate(context) {
 		uppercaseSelection();
 	 });	
 	 context.subscriptions.push(contextUCSel);
+
+
+	//treeView10
+	let tvData10 = new tv10_tiColor();
+	vscode.window.createTreeView("treeView10", {
+		treeDataProvider: tvData10,
+	});
+
+	// Register the file decoration provider
+	const fdp1 = new tv10_fdp(tvData10);
+    context.subscriptions.push(vscode.window.registerFileDecorationProvider(fdp1));
+
+	//treeView11
+	// https://github.com/vscode-icons/vscode-icons
+    // Set the custom icon theme - Below itself should change the icon for all the filetypes globally
+    // vscode.workspace.getConfiguration().update('workbench.iconTheme', 'myIconTheme', true);
+
+	let tvData11 = new tv11_icons();
+	vscode.window.createTreeView("treeView11", {
+		treeDataProvider: tvData11,
+	});
 
 
 }
