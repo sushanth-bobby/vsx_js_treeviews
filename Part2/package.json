@@ -27,47 +27,6 @@
     "views": {
       "treeview-examples": [
         {
-          "id": "treeView1",
-          "name": "Tree View 1",
-          "icon": "media/dep.svg",
-          "contextualTitle": "Example 1"
-        },
-        {
-          "id": "treeView2",
-          "name": "Tree View 2",
-          "contextualTitle": "Example 2"
-        },
-        {
-          "id": "treeView3",
-          "name": "JSON Tree View 3",
-          "contextualTitle": "Example 3"
-        },
-        {
-          "id": "treeView4",
-          "name": "Tree View 4 - Open File",
-          "contextualTitle": "Example 4"
-        },
-        {
-          "id": "treeView5",
-          "name": "Tree View 5 - User Files",
-          "contextualTitle": "Example 5"
-        },
-        {
-          "id": "treeView6",
-          "name": "Tree View 6 - Get From API",
-          "contextualTitle": "Example 6"
-        },
-        {
-          "id": "treeView7",
-          "name": "Tree View 7 - Auto Polling",
-          "contextualTitle": "Example 7"
-        },
-        {
-          "id": "treeView8",
-          "name": "Tree View 8 - Auto Polling with API Data",
-          "contextualTitle": "Example 8"
-        },
-        {
           "id": "treeView9",
           "name": "Tree View 9 - File EXplorer",
           "contextualTitle": "Example 9"
@@ -77,43 +36,21 @@
           "name": "Test View Drag and Drop"
         }
       ],
-      "explorer": [
-        {
-          "id": "jsonOutline",
-          "name": "Json Outline",
-          "when": "jsonOutlineEnabled"
-        },
-        {
-          "id": "ftpExplorer",
-          "name": "FTP Explorerr"
-        },
-        {
-          "id": "fileExplorer",
-          "name": "File Explorerr"
-        }
-      ]
+      "explorer": [ ]
     },
     "commands": [
       {
-        "command": "js-treeviews.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "myTreeView.itemClick",
-        "title": "Click Node"
-      },
-      {
-        "command": "myTreeView.itemClickOpen",
-        "title": "Click Node"
-      },
-      {
-        "command": "treeview6.urlClick",
-        "title": "Click Node"
-      },
-      {
         "command": "treeView9.postDocument",
         "title": "POST"
-      }      
+      }, 
+      {
+        "command": "extension.uppercaseDocument",
+        "title": "Convert Document to Uppercase"
+     }, 
+     {
+       "command": "extension.uppercaseSelection",
+       "title": "Convert Selection to Uppercase"
+    }
     ],
     "menus": {
       "view/item/context": [
@@ -122,6 +59,16 @@
           "when": "view == treeView9 && viewItem == editorItem",
           "group": "right_click@0"
         }
+      ],
+      "editor/context": [
+        {
+          "command": "extension.uppercaseDocument",
+          "when": "editorTextFocus"
+       },
+       {
+        "command": "extension.uppercaseSelection",
+        "when": "editorTextFocus"
+       }        
       ]
     }
 

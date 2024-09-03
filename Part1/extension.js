@@ -19,7 +19,6 @@ const tv5_userfiles = require("./src/treeview5.js"); //Tree View 5
 const tv6_api = require("./src/treeview6.js"); //Tree View 6
 const tv7_poll = require("./src/treeview7.js"); //Tree View 7
 const tv8_pollAPI = require("./src/treeview8.js"); //Tree View 8
-const tv9_fileExplorer = require("./src/treeview9.js"); //Tree View 9
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -151,32 +150,6 @@ function activate(context) {
 	setInterval(() => {
 		tvData8.updateStatuses();
 	}, 20000);		
-
-	//treeView9
-	let tvData9 = new tv9_fileExplorer();
-	let tv9 = vscode.window.createTreeView("treeView9", {
-		treeDataProvider: tvData9,
-		});
-		context.subscriptions.push(
-			vscode.window.onDidChangeActiveTextEditor(() => {
-				tvData9.refresh();
-			}),
-			vscode.workspace.onDidCloseTextDocument(() => {
-				tvData9.refresh();
-			}),
-			vscode.workspace.onDidOpenTextDocument(() => {
-				tvData9.refresh();
-			}),
-			vscode.window.onDidChangeVisibleTextEditors(() => {
-				tvData9.refresh();
-			}),
-			vscode.window.tabGroups.onDidChangeTabs(() => {
-				tvData9.refresh();
-			}),
-			vscode.commands.registerCommand('treeView9.postDocument', () => {
-			  tvData9.postActiveDocument();
-			})			
-		);
 
 }
 
