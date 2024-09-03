@@ -120,7 +120,7 @@
         {
           "command": "treeView9.postDocument",
           "when": "view == treeView9 && viewItem == editorItem",
-          "group": "inline"
+          "group": "right_click@0"
         }
       ]
     }

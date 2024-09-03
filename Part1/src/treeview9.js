@@ -48,10 +48,11 @@ class OpenEditorsTreeDataProvider {
     if (editor) {
       const document = editor.document;
       const content = document.getText();
+      console.log(`content: ${content}`)
   
       try {
         const response = await axios.post('http://localhost:3100/post', {
-          content: content
+          body: content
         });
         vscode.window.showInformationMessage('Document posted successfully!');
       } catch (error) {
