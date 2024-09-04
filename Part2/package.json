@@ -42,6 +42,10 @@
           "contextualTitle": "Example 11"
         },
         {
+          "id": "treeView12",
+          "name": "Tree View 12 - Collapse/Expand Tree"
+        },        
+        {
           "id": "testViewDragAndDrop",
           "name": "Test View Drag and Drop"
         }
@@ -73,6 +77,11 @@
      {
        "command": "extension.uppercaseSelection",
        "title": "Convert Selection to Uppercase"
+    },
+    {
+      "command": "treeView12.refresh",
+      "title": "Collapse All",
+      "icon": "$(refresh)"
     }
     ],
     "menus": {
@@ -92,7 +101,14 @@
         "command": "extension.uppercaseSelection",
         "when": "editorTextFocus"
        }        
-      ]
+      ],
+      "view/title": [
+        {
+          "command": "treeView12.refresh",
+          "when": "view == treeView12",
+          "group": "navigation"
+        }
+      ]      
     }
 
   },

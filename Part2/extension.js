@@ -27,6 +27,7 @@ const {StatusTreeViewProvider: tv10_tiColor
 // var tv10_tiColor = new c10.StatusTreeViewProvider();
 
 const tv11_icons = require("./src/treeview11.js"); //Tree View 11
+const tv12_tdp = require('./src/treeview12.js'); //Tree View 12
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -111,6 +112,20 @@ function activate(context) {
 		treeDataProvider: tvData11,
 	});
 
+	//treeView12
+    const tvData12 = new tv12_tdp();
+    vscode.window.registerTreeDataProvider('treeView12', tvData12);
+	const tv12 = vscode.window.createTreeView('treeView12', {
+        treeDataProvider: tvData12,
+		showCollapseAll: true
+    });
+
+    // Register the refresh command
+    vscode.commands.registerCommand('treeView12.refresh', () => {
+        tvData12.refresh();
+    });
+
+    context.subscriptions.push(tv12)
 
 }
 
