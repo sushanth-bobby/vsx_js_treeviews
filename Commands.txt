@@ -2,3 +2,9 @@ git check-ignore -v -- ./Part1/node_modules
 git check-ignore -v -- ./Part2/node_modules
 
 7z a js_treeviews.zip . -xr!node_modules
+7z a test_api_server.zip . -xr!node_modules
+
+
+VSCode References
+* https://github.com/microsoft/vscode-icons
+* https://code.visualstudio.com/api/references/icons-in-labels

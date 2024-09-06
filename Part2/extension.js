@@ -1,13 +1,14 @@
 /*
 const path = require('path');
 const os = require('os');
+*/
 const https = require('https')
 const axios = require('axios').create({
     httpsAgent: new https.Agent({
         rejectUnauthorized: false
     })
 })
- */
+
 
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
@@ -28,6 +29,9 @@ const {StatusTreeViewProvider: tv10_tiColor
 
 const tv11_icons = require("./src/treeview11.js"); //Tree View 11
 const tv12_tdp = require('./src/treeview12.js'); //Tree View 12
+
+const {TreeViewProvider: tv13_tiColor
+	, FileDecorationProvider: tv13_fdp} = require("./src/treeview13 copy.js"); //Tree View 13
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -124,8 +128,26 @@ function activate(context) {
     vscode.commands.registerCommand('treeView12.refresh', () => {
         tvData12.refresh();
     });
-
     context.subscriptions.push(tv12)
+
+	//treeView13
+	let url = `http://localhost:3100/poll`
+	let tvData13 = new tv13_tiColor(url);
+
+    // Register the TreeDataProvider
+    vscode.window.registerTreeDataProvider('treeView13', tvData13);
+    // Register the FileDecorationProvider
+    const decorationProvider = new tv13_fdp(tvData13);
+    context.subscriptions.push(vscode.window.registerFileDecorationProvider(decorationProvider));
+
+    tvData13.onDidChangeTreeData(() => {
+        decorationProvider.refreshAll();
+    });
+
+    // Start auto-refresh
+    tvData13.startAutoRefresh(5000);
+
+//	
 
 }
 

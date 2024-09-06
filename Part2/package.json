@@ -44,7 +44,12 @@
         {
           "id": "treeView12",
           "name": "Tree View 12 - Collapse/Expand Tree"
-        },        
+        },
+        {
+          "id": "treeView13",
+          "name": "Tree View 13 - TreeItem ColorChange API",
+          "contextualTitle": "Example 13"
+        },
         {
           "id": "testViewDragAndDrop",
           "name": "Test View Drag and Drop"
@@ -75,14 +80,22 @@
         "title": "Convert Document to Uppercase"
      }, 
      {
-       "command": "extension.uppercaseSelection",
-       "title": "Convert Selection to Uppercase"
+        "command": "extension.uppercaseSelection",
+        "title": "Convert Selection to Uppercase"
     },
     {
-      "command": "treeView12.refresh",
-      "title": "Collapse All",
-      "icon": "$(refresh)"
-    }
+        "command": "treeView12.refresh",
+        "title": "Collapse All",
+        "icon": "$(refresh)"
+    },
+    {
+      "command": "treeView13.urlClick",
+      "title": "Click Node"
+    },
+    {
+      "command": "apiDataExplorer.refresh",
+      "title": "Click Node"
+    }      
     ],
     "menus": {
       "view/item/context": [
