@@ -100,7 +100,11 @@
       {
         "command": "treeview6.urlClick",
         "title": "Click Node"
-      }      
+      },
+      {
+        "command": "treeview8.urlClick",
+        "title": "Click Node"
+      }            
     ]
   },
   "scripts": {

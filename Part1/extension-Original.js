@@ -146,74 +146,10 @@ function activate(context) {
 	let tv8 = vscode.window.createTreeView("treeView8", {
 		treeDataProvider: tvData8,
 	  });
-	
-	// Update Status Every 10 seconds
 	context.subscriptions.push(tv8);
 	setInterval(() => {
 		tvData8.updateStatuses();
-	}, 10000);
-
-	// treeview8 URL Clicks
-	let documentMap = new Map();
-	vscode.commands.registerCommand('treeview8.urlClick', async (item) => {
-		try {
-			console.log(`URL: ${item.url}`)
-
-			console.log(`Before documentMap`)
-			documentMap.forEach( (value, key) => {
-				console.log(`${key}: ${JSON.stringify(value)}`); 
-			});			
-			// for (let doc of documentMap) { // the same as of .entries()
-			// console.log(doc);
-			// }						
-
-			let document2 = documentMap.get(item.url);
-			console.log(`document2 = ${JSON.stringify(document2)}`)
-
-			if(document2){
-				await vscode.window.showTextDocument(document2, vscode.ViewColumn.One);
-			} else {
-				document2 = await vscode.workspace.openTextDocument({ content: 'Fetching data...', language: 'plaintext' });
-				await vscode.window.showTextDocument(document2, vscode.ViewColumn.One);
-				documentMap.set(item.url, document2);
-			}
-			console.log(`After documentMap`)
-			documentMap.forEach( (value, key) => {
-				console.log(`${key}: ${JSON.stringify(value)}`); 
-			});			
-
-            let response = await axios.get(item.url);
-			let data     = response.data
-			// console.log(`data = ${JSON.stringify(data)}`)
-			// console.log(`treeview8-headers = ${JSON.stringify(response.headers)}`)
-			let contentType = response['headers']['content-type']
-			console.log(`contentType = ${contentType}`)
-
-			let lang;
-			if(contentType.includes('json')){
-				lang = 'json'
-				data = JSON.stringify(data, null, 2)
-			}else{
-				lang = 'plaintext'
-			}
-
-			let edit = new vscode.WorkspaceEdit();
-			let wholeDocumentRange = new vscode.Range(
-				document2.positionAt(0),
-				document2.positionAt(document2.getText().length)
-			);
-
-			edit.replace(document2.uri, wholeDocumentRange, data);
-			await vscode.workspace.applyEdit(edit);
-			await vscode.languages.setTextDocumentLanguage(document2, lang);	
-            
-            // await document2.save();
-
-		} catch (error) {
-			vscode.window.showErrorMessage(`Failed to fetch data: ${error.message}`);
-		}
-	});
-
+	}, 20000);		
 
 }
 

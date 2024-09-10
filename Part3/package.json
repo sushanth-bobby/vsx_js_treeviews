@@ -1,0 +1,85 @@
+{
+  "name": "js-treeviews",
+  "displayName": "js_TreeViews",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:json",
+    "onLanguage:jsonc"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "treeview-examples",
+          "title": "Tree view Examples",
+          "icon": "media/dep.svg"
+        },
+        {
+          "id": "ab_sidebar",
+          "title": "Sidebar Links",
+          "icon": "media/twitter.svg"
+        }
+      ]
+    },
+    "views": {
+      "treeview-examples": [
+        {
+          "id": "treeView9",
+          "name": "Tree View 9 - File EXplorer",
+          "contextualTitle": "Example 9"
+        }
+      ],
+      "ab_sidebar": [
+        {
+          "id": "view_sidebar1",
+          "name": "Sidebar Links"
+        }
+      ],
+      "explorer": [ 
+        {
+          "id": "webviewLogin",
+          "name": "Login"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "treeView9.postDocument",
+        "title": "POST"
+      },
+      {
+        "command": "treeView14.itemClick",
+        "title": "Click Item"
+      },
+      {
+        "command": "extension.openSidebar",
+        "title": "Open API Sidebar"
+      }      
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.92.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "axios": "^1.7.5"
+  }
+}

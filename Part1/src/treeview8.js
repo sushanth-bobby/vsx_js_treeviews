@@ -6,7 +6,7 @@ const axios = require('axios').create({
     })
 })
 
-
+/*
 class StatusTreeItem extends vscode.TreeItem {
     constructor(label, status) {
         super(label);
@@ -36,7 +36,7 @@ class StatusTreeItem extends vscode.TreeItem {
         this.updateIcon();
     }
 }
-
+*/
 class APIDataProvider {
 
     constructor(route) {
@@ -93,17 +93,17 @@ class APIDataProvider {
     }
 
     transformApiResponse(apiData){
-        console.log(`apiData=${apiData}`)
+        // console.log(`apiData=${apiData}`)
         return apiData.map(item => new TreeItem(item))
     }
 
     getTreeItem(element) {
-        console.log(`IN getTreeItem ${JSON.stringify(element)}`);
+        // console.log(`IN getTreeItem ${JSON.stringify(element)}`);
         return element;
     }
 
     getChildren(element) {
-        console.log(`IN getChildren ${JSON.stringify(element)}`);
+        // console.log(`IN getChildren ${JSON.stringify(element)}`);
 
         // Return top-level items if no parent
         if (!element) {
@@ -145,7 +145,7 @@ class TreeItem extends vscode.TreeItem {
         this.status = data.status
         this.updateIcon()
         this.command = {
-            command: 'treeview6.urlClick',
+            command: 'treeview8.urlClick',
             title: 'Open Link',
             arguments: [{ label: this.label, url: this.url}] // Pass the current item
         };

@@ -8,12 +8,12 @@ class CarsDataProvider {
     // }
 
     getTreeItem(element) {
-        console.log(`IN getTreeItem ${JSON.stringify(element)}`);
+        // console.log(`IN getTreeItem ${JSON.stringify(element)}`);
         return element;
     }
 
     getChildren(element) {
-        console.log(`IN getChildren ${JSON.stringify(element)}`);
+        // console.log(`IN getChildren ${JSON.stringify(element)}`);
         if (!element) {
             // Top-level items
             return Promise.resolve([

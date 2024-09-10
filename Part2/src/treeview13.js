@@ -1,132 +1,106 @@
 const vscode = require("vscode");
-const https = require('https')
+const https = require('https');
 const axios = require('axios').create({
     httpsAgent: new https.Agent({
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
+        keepAlive: true
     })
-})
+});
 
-
-class StatusTreeViewProvider {
-    constructor(route) {
+class TreeViewProvider {
+    constructor(url) {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
 
         // Local URL to get JSON file for sidebar
-        this.url = `http://localhost:3100/${route}`
-        this.data = []
-        this.server_data = []
+        this.url = url;
+        this.data = [];
         this.getSidebarData();
-
-        // this.items = this.getItems();
     }
 
-    async getGetDataFromAPI(){
+    async getGetDataFromAPI() {
         let config = {
             method: 'get',
             url: this.url
-        }
+        };
 
-        let error_message = ""
-        this.data = await axios(config).then( response =>{
-            // this.data = this.transformApiResponse(response.data)            
-            return response.data
-        }).then( data =>{
-            this.server_data = data
-            return this.transformApiResponse(data)
-        }).catch( (error) =>{
-            if(error.message == ''){
-                error.message = 'Not able to connect to API. Check if that server is available' //This will get triggered when API Server is not run                
+        try {
+            const response = await axios(config);
+            this.data = this.transformApiResponse(response.data);
+        } catch (error) {
+            console.log(`Error: ${JSON.stringify(error)}`)
+            let errorMessage = 'Failed to retrieve data';
+            if (error.message === '') {
+                errorMessage = 'Not able to connect to API. Check if that server is available';
             }
-            this.server_data = []
-            // this.data = [new MessageTreeItem(`${error.message}`, 'error')]
-            vscode.window.showErrorMessage(`Failed to retreive sidebar JSON data: ${error_message}, url: ${this.url}`)
-            // return []
-            return [new MessageTreeItem(`${error.message}`, 'error')]
-        });
-        
+            vscode.window.showErrorMessage(`${errorMessage}, URL: ${this.url}`);
+            this.data = [new MessageTreeItem(`${errorMessage}`, 'error')];
+        }
     }
 
-    async getSidebarData(){
-        const loadingTimeout = setTimeout( () =>{
-            vscode.window.showWarningMessage('Loading data... Pleas wait... Response is taking longer than expected');
-            this.data = [new MessageTreeItem('Loading...', 'warn')]
-            this._onDidChangeTreeData.fire()
-        }, 5000)
+    async getSidebarData() {
+        const loadingTimeout = setTimeout(() => {
+            vscode.window.showWarningMessage('Loading data... Please wait... Response is taking longer than expected');
+            this.data = [new MessageTreeItem('Loading...', 'warn')];
+            this._onDidChangeTreeData.fire();
+        }, 5000);
 
         await this.getGetDataFromAPI();
-        clearTimeout(loadingTimeout) // Clear timeout if response comes back in time
+        clearTimeout(loadingTimeout); // Clear timeout if response comes back in time
 
-        // Refresh the tree view - Below is the essential for .catch - this.data message
-        this._onDidChangeTreeData.fire()
+        this._onDidChangeTreeData.fire();
     }
 
-    transformApiResponse(apiData){
-        console.log(`apiData=${apiData}`)
-        return apiData.map(item => new TreeItem(item))
+    transformApiResponse(apiData) {
+        return apiData.map(item => new TreeItem(item));
     }
-
-/*
-    getItems() {
-        // Here we instantiate the tree items with predefined labels and statuses
-        return [
-            new StatusTreeItem('Task 1', 'success'),
-            new StatusTreeItem('Task 2', 'failed'),
-            new StatusTreeItem('Task 3', 'in-progress'),
-            new StatusTreeItem('Task 4', 'success'),
-            new StatusTreeItem('Task 5', 'failed')
-        ];
-    }    
-*/
 
     getTreeItem(element) {
-        // console.log(`IN getTreeItem ${JSON.stringify(element)}`);
         return element;
     }
 
     getChildren(element) {
-        // console.log(`IN getChildren ${JSON.stringify(element)}`);
-        // return Promise.resolve(this.items);
-        // Return top-level items if no parent
         if (!element) {
-            // Top-level items
             return Promise.resolve(this.data);
         }
-
-        // Return children of current directory
-        return Promise.resolve(
-            (element.children || []).map(child => new TreeItem(child))
-        )
+        return Promise.resolve(element.children || []);
     }
 
-    refresh() {
-        console.log("Hit Refresh")
+    startAutoRefresh(interval = 5000) {
+        setInterval(() => {
+            this.updateStatuses();
+        }, interval);
+    }
+
+    async updateStatuses() {
+        await this.getGetDataFromAPI();
         this._onDidChangeTreeData.fire();
     }
-
 }
 
 class TreeItem extends vscode.TreeItem {
-    constructor(data) {
+    constructor(data, parentUri = '') {
         super(
             data.label,
             data.children && data.children.length > 0
-            ? vscode.TreeItemCollapsibleState.Collapsed
-            : vscode.TreeItemCollapsibleState.None
+                ? vscode.TreeItemCollapsibleState.Collapsed
+                : vscode.TreeItemCollapsibleState.None
         );
-        this.contextValue = 'TreeItem'
-        this.children = data.children        
-        this.url = data.url
-        this.status = data.status
-/*        this.updateIcon()*/
-        this.updateItemAppearance();        
-        this.resourceUri = vscode.Uri.file(data.label); // This is used for decoration
-        this.command = {
-            command: 'treeview6.urlClick',
-            title: 'Open Link',
-            arguments: [{ label: this.label, url: this.url}] // Pass the current item
-        };
+        this.contextValue = 'TreeItem';
+        // this.children = data.children;
+        this.children = data.children ? data.children.map(child => new TreeItem(child, this.resourceUri ? this.resourceUri.path : '')) : [];
+        this.url = data.url;
+        this.status = data.status;
 
+        // Use a consistent URI schema
+        this.resourceUri = vscode.Uri.parse(`${parentUri}/${data.label}`);
+
+        this.updateItemAppearance();       
+        this.command = {
+            command: 'treeView13.urlClick',
+            title: 'Open Link',
+            arguments: [{ label: this.label, url: this.url }] // Pass the current item
+        };
     }
 
     updateItemAppearance() {
@@ -136,7 +110,7 @@ class TreeItem extends vscode.TreeItem {
                 this.tooltip = 'Operation Successful';
                 this.description = '(Success)';
                 break;
-            case 'failed':
+            case 'failure':
                 this.iconPath = new vscode.ThemeIcon('error', new vscode.ThemeColor('charts.red'));
                 this.description = '(Failed)';
                 this.tooltip = 'Operation Failed';
@@ -150,78 +124,96 @@ class TreeItem extends vscode.TreeItem {
                 this.iconPath = new vscode.ThemeIcon('question');
                 this.description = '(Unknown)';
         }
-
-        // Customizing the background and foreground colors (Experimental API)
-        // this.resourceUri = vscode.Uri.parse(`file:///dummy-path/${this.label}`);
-        // vscode.workspace.getConfiguration('workbench.colorCustomizations').update(`tree.${this.label}.foreground`, this.getColor());
     }
-
 }
 
 class FileDecorationProvider {
     constructor(treeDataProvider) {
         this.treeDataProvider = treeDataProvider;
+        this._onDidChangeFileDecorations = new vscode.EventEmitter();
+        this.onDidChangeFileDecorations = this._onDidChangeFileDecorations.event;
     }
 
     provideFileDecoration(uri) {
-        console.log(JSON.stringify(uri))
-        const treeItem = this.treeDataProvider.items.find(item => item.resourceUri.path === uri.path);
+        const treeItem = this.findTreeItemByUri(uri, this.treeDataProvider.data);
         if (!treeItem) {
             return;
         }
-        console.log(`treeItem = ${JSON.stringify(treeItem)}`)
 
-        switch (treeItem.status) {
+        return this.getDecorationForStatus(treeItem.status);
+    }
+
+    getDecorationForStatus(status) {
+        switch (status) {
             case 'success':
                 return {
                     badge: '✔️',
                     tooltip: 'Success',
                     color: new vscode.ThemeColor('charts.green'),
-                    propagate: true
                 };
-            case 'failed':
+            case 'failure':
                 return {
                     badge: '❌',
                     tooltip: 'Failed',
                     color: new vscode.ThemeColor('charts.red'),
-                    propagate: true
                 };
             case 'in-progress':
                 return {
-                    badge: '🔄',
+                    badge: '⭕',
                     tooltip: 'In Progress',
-                    color: new vscode.ThemeColor('charts.yellow'),
-                    propagate: true
+                    color: new vscode.ThemeColor('charts.orange'),
                 };
             default:
                 return {
                     badge: '?',
                     tooltip: 'Unknown',
                     color: new vscode.ThemeColor('foreground'),
-                    propagate: true
                 };
         }
     }
 
+/*
+    refresh(uri) {
+        this._onDidChangeFileDecorations.fire(uri);
+    }
+*/
+    findTreeItemByUri(uri, items) {
+        for (const item of items) {
+            if (item.resourceUri.toString() === uri.toString()) {
+                return item;
+            }
+            if (item.children) {
+                const found = this.findTreeItemByUri(uri, item.children);
+                if (found) {
+                    return found;
+                }
+            }
+        }
+        return null;
+    }
+
+    refreshAll() {
+        this._onDidChangeFileDecorations.fire(undefined);
+    }
+
 }
 
-class MessageTreeItem extends vscode.TreeItem{
-    constructor(message, indicator){
+class MessageTreeItem extends vscode.TreeItem {
+    constructor(message, indicator) {
         super(
             message,
             vscode.TreeItemCollapsibleState.None
-        );        
+        );
 
         this.contextValue = 'messageItem';
         this.description = message;
         this.tooltip = message;
-        if(indicator == 'warn'){
-            this.iconPath = new vscode.ThemeIcon('warning', new vscode.ThemeColor('terminal.ansiBrightYellow'))
-        } else if(indicator =='error'){
-            this.iconPath = new vscode.ThemeIcon('error', new vscode.ThemeColor('errorForeground'))
+        if (indicator === 'warn') {
+            this.iconPath = new vscode.ThemeIcon('warning', new vscode.ThemeColor('terminal.ansiBrightYellow'));
+        } else if (indicator === 'error') {
+            this.iconPath = new vscode.ThemeIcon('error', new vscode.ThemeColor('errorForeground'));
         }
     }
 }
 
-
-module.exports = {StatusTreeViewProvider, FileDecorationProvider};
+module.exports = { TreeViewProvider, FileDecorationProvider };

@@ -12,10 +12,10 @@ class StatusTreeViewProvider {
         // Here we instantiate the tree items with predefined labels and statuses
         return [
             new StatusTreeItem('Task 1', 'success'),
-            new StatusTreeItem('Task 2', 'failed'),
+            new StatusTreeItem('Task 2', 'failure'),
             new StatusTreeItem('Task 3', 'in-progress'),
             new StatusTreeItem('Task 4', 'success'),
-            new StatusTreeItem('Task 5', 'failed')
+            new StatusTreeItem('Task 5', 'failure')
         ];
     }    
 
@@ -52,7 +52,7 @@ class StatusTreeItem extends vscode.TreeItem {
                 this.tooltip = 'Operation Successful';
                 this.description = '(Success)';
                 break;
-            case 'failed':
+            case 'failure':
                 this.iconPath = new vscode.ThemeIcon('error', new vscode.ThemeColor('charts.red'));
                 this.description = '(Failed)';
                 this.tooltip = 'Operation Failed';
@@ -95,7 +95,7 @@ class FileDecorationProvider {
                     color: new vscode.ThemeColor('charts.green'),
                     propagate: true
                 };
-            case 'failed':
+            case 'failure':
                 return {
                     badge: '❌',
                     tooltip: 'Failed',

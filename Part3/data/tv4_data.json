@@ -1,0 +1,38 @@
+[
+    {
+        "label": "git-tags.txt",
+        "filePath": "C:/Users/Sushanth/Favorites/Downloads/git-tags.txt",
+        "children": [
+            {
+                "label": "PhotoOrder.txt",
+                "filePath": "C:/Users/Sushanth/Favorites/Downloads/PhotoOrder.txt",
+                "children": [
+                    { "label": "VSCode-Extension.txt", "filePath": "C:/Users/Sushanth/Favorites/Downloads/VSCode-Extension.txt" },
+                    { "label": "Grandchild 2", "filePath": "C:/path/to/grandchild2.txt" }
+                ]
+            },
+            {
+                "label": "Child 2",
+                "filePath": "C:/path/to/child2.txt",
+                "children": [
+                    { "label": "Grandchild 3", "filePath": "C:/path/to/grandchild3.txt" },
+                    { "label": "Grandchild 4", "filePath": "C:/path/to/grandchild4.txt" }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Parent 2",
+        "filePath": "C:/path/to/parent2.txt",
+        "children": [
+            {
+                "label": "Child 3",
+                "filePath": "C:/path/to/child3.txt",
+                "children": [
+                    { "label": "Grandchild 5", "filePath": "C:/path/to/grandchild5.txt" },
+                    { "label": "Grandchild 6", "filePath": "C:/path/to/grandchild6.txt" }
+                ]
+            }
+        ]
+    }
+]

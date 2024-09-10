@@ -11,12 +11,12 @@ class UserFilesOpenOnClickDataProvider {
     }
 
     getTreeItem(element) {
-        console.log(`IN getTreeItem ${JSON.stringify(element)}`);
+        // console.log(`IN getTreeItem ${JSON.stringify(element)}`);
         return element;
     }
 
     getChildren(element) {
-        console.log(`IN getChildren ${JSON.stringify(element)}`);
+        // console.log(`IN getChildren ${JSON.stringify(element)}`);
 
         // Return top-level items if no parent
         if (!element) {

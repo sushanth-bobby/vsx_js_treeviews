@@ -50,17 +50,17 @@ class APIDataProvider {
     }
 
     transformApiResponse(apiData){
-        console.log(`apiData=${apiData}`)
+        // console.log(`apiData=${apiData}`)
         return apiData.map(item => new TreeItem(item))
     }
 
     getTreeItem(element) {
-        console.log(`IN getTreeItem ${JSON.stringify(element)}`);
+        // console.log(`IN getTreeItem ${JSON.stringify(element)}`);
         return element;
     }
 
     getChildren(element) {
-        console.log(`IN getChildren ${JSON.stringify(element)}`);
+        // console.log(`IN getChildren ${JSON.stringify(element)}`);
 
         // Return top-level items if no parent
         if (!element) {

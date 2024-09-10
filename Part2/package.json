@@ -91,10 +91,6 @@
     {
       "command": "treeView13.urlClick",
       "title": "Click Node"
-    },
-    {
-      "command": "apiDataExplorer.refresh",
-      "title": "Click Node"
     }      
     ],
     "menus": {
