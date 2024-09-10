@@ -18,14 +18,6 @@ const vscode = require('vscode');
 
 // Local Requires
 const tv14_tdp = require("./src/treeview14.js"); //Tree View 9
-const sb1_sbp = require("./src/sidebar1.js"); //Sidebar 1
-const sb1_sbp2 = require("./src/sidebar12.js"); //Sidebar 1
-
-// const { uppercaseDocument, uppercaseSelection } = require('./src/Doc_RightClickUpperCase.js');
-
-// Destructuring
-// const {StatusTreeViewProvider: tv10_tiColor
-// 	, FileDecorationProvider: tv10_fdp} = require("./src/treeview10.js"); //Tree View 10
 
 let authToken = null;
 
@@ -87,7 +79,7 @@ function activate(context) {
                             vscode.window.showInformationMessage('Login successful!');
                             panel.dispose();
                         } catch (error) {
-                            vscode.window.showErrorMessage('Login failed!');
+                            vscode.window.showErrorMessage('Login failed! Could be server issues');
                         }
                     }
                 },
@@ -110,39 +102,6 @@ function activate(context) {
     });
 
     context.subscriptions.push(tv14_dispos);
-
-    // Sidebar - Twitter
-    /*
-    const sbp1 = new sb1_sbp(context.extensionUri);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider('sidebar1', sbp1)
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openLink', async (url) => {
-            try {
-                const response = await axios.get(url);
-                const panel = vscode.window.createWebviewPanel(
-                    'dataView', 
-                    'Data View', 
-                    vscode.ViewColumn.Beside, 
-                    {}
-                );
-                panel.webview.html = `<pre>${response.data}</pre>`;
-            } catch (error) {
-                vscode.window.showErrorMessage('Failed to fetch data from the URL');
-            }
-        })
-    );    
-    */
-      // Register command to open sidebar webview
-    context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openSidebar', () => {
-            console.log("Executing sb1_sbp2")
-            sb1_sbp2.register(context);
-        })
-    );
-
 	//
 
 }

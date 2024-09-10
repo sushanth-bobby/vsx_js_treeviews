@@ -1,0 +1,30 @@
+{
+    "iconDefinitions": {
+        "default_file": {
+            "iconPath": "./icons/default_file.svg"
+        },
+        "js_file": {
+            "iconPath": "./icons/file_type_js.svg"
+        },
+        "html_file": {
+            "iconPath": "./icons/file_type_html.svg"
+        },
+        "json_file": {
+            "iconPath": "./icons/file_type_json.svg"
+        },
+        "text_file": {
+            "iconPath": "./icons/file_type_text.svg"
+        }
+    },
+    "fileExtensions": {
+        "js": "js_file",
+        "html": "html_file",
+        "json": "json_file",
+        "txt": "text_file"
+    },
+    "fileNames": {
+        "default": "default_file"
+    },
+    "folderNames": {},
+    "languageIds": {}
+}

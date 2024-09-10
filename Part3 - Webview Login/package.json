@@ -21,11 +21,6 @@
           "id": "treeview-examples",
           "title": "Tree view Examples",
           "icon": "media/dep.svg"
-        },
-        {
-          "id": "ab_sidebar",
-          "title": "Sidebar Links",
-          "icon": "media/twitter.svg"
         }
       ]
     },
@@ -37,12 +32,6 @@
           "contextualTitle": "Example 9"
         }
       ],
-      "ab_sidebar": [
-        {
-          "id": "view_sidebar1",
-          "name": "Sidebar Links"
-        }
-      ],
       "explorer": [ 
         {
           "id": "webviewLogin",
@@ -52,16 +41,8 @@
     },
     "commands": [
       {
-        "command": "treeView9.postDocument",
-        "title": "POST"
-      },
-      {
         "command": "treeView14.itemClick",
         "title": "Click Item"
-      },
-      {
-        "command": "extension.openSidebar",
-        "title": "Open API Sidebar"
       }      
     ]
   },
