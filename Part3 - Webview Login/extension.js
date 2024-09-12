@@ -10,7 +10,6 @@ const axios = require('axios').create({
 })
 
 
-
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
@@ -49,6 +48,7 @@ function activate(context) {
     vscode.window.createTreeView('webviewLogin', { treeDataProvider: tvData14 });
 
     let tv14_dispos = vscode.commands.registerCommand('treeView14.itemClick', async (item) => {
+        console.log(`context.extensionUri=${context.extensionUri}`)
         if (item.label === 'Login') {
             const panel = vscode.window.createWebviewPanel(
                 'loginWebview', 
@@ -57,7 +57,7 @@ function activate(context) {
                 { enableScripts: true }
             );
 
-            panel.webview.html = getLoginHtml();
+            panel.webview.html = getLoginHtml(panel.webview, context.extensionUri);
 
             panel.webview.onDidReceiveMessage(
                 async (message) => {
@@ -111,29 +111,36 @@ function deactivate() {}
 
 
 // ------------------ Functions ------------------
-function getLoginHtml() {
+function getLoginHtml(webview, extensionUri) {
+    let styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'login.css'))
+    console.log(`styleUri=${styleUri}`)
     return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login</title>
-    </head>
-    <body>
-        <h1>Login</h1>
-        <form id="login-form">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username"><br><br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password"><br><br>
-			<input type="button" value="Submit" onclick="login()">
-        </form>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Login Page</title>
+            <link rel="stylesheet" href="${styleUri}"> <!-- Link to the CSS file -->
+        </head>
+        <body>
+            <div class="container">
+                <h1>Enter admin:admin for testing login</h1>
+                <form>
+                    <input type="text" placeholder="racf" id="username" name="username">
+                    <input type="password" placeholder="password" id="password" name="password">
+                    <button type="submit" onclick="login()">Sign in</button>
 
-        <script>
-            const vscode = acquireVsCodeApi();
+                    <!-- div class="or-divider">or</div -->
 
-			function login() {
+                    <div class="agreement">
+                        if credentials fail, do not retry, validate it outside vscode
+                    </div>
+                </form>
+            </div>
+            <script>
+                const vscode = acquireVsCodeApi();
+
+                function login() {
                     const username = document.getElementById('username').value;
                     const password = document.getElementById('password').value;
 
@@ -143,10 +150,10 @@ function getLoginHtml() {
                         password
                     });
                 }
+            </script>
 
-        </script>
-    </body>
-    </html>
+        </body>
+        </html>
     `;
 }
 
