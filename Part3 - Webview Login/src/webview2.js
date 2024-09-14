@@ -21,7 +21,7 @@ class MySidebarProvider {
           localResourceRoots: [this._context.extensionUri],
       };
 
-      webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
+      webviewView.webview.html = this.getHtmlForWebview(webviewView.webview, this._context.extensionUri);
 
       // Handle link click messages
       webviewView.webview.onDidReceiveMessage(async (message) => {
@@ -33,27 +33,36 @@ class MySidebarProvider {
       });
   }
 
-  getHtmlForWebview(webview) {
+  getHtmlForWebview(webview, extensionUri) {
       console.log(`IN getHtmlForWebview`)
-      return `
-          <html>
-          <body>
-              <ul>
-                  <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/1')">Link 1</a></li>
-                  <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/2')">Link 2</a></li>
-                  <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/3')">Link 3</a></li>
-                  <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/4')">Link 4</a></li>
-                  <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/5')">Link 5</a></li>
-              </ul>
-              <script>
-                  const vscode = acquireVsCodeApi();
+      let styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'list.css'))
+      console.log(`styleUri=${styleUri}`)
 
-                  function handleLinkClick(url) {
-                      vscode.postMessage({ command: 'linkClick', url });
-                  }
-              </script>
-          </body>
-          </html>
+      return `
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Login Page</title>
+            <link rel="stylesheet" href="${styleUri}"> <!-- Link to the CSS file -->
+        </head>
+        <body>
+            <ul>
+                <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/1')">Link 1</a></li>
+                <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/2')">Link 2</a></li>
+                <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/3')">Link 3</a></li>
+                <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/4')">Link 4</a></li>
+                <li><a href="#" onclick="handleLinkClick('https://jsonplaceholder.typicode.com/posts/5')">Link 5</a></li>
+            </ul>
+
+            <script>
+                const vscode = acquireVsCodeApi();
+
+                function handleLinkClick(url) {
+                    vscode.postMessage({ command: 'linkClick', url });
+                }
+            </script>
+        </body>
+        </html>
       `;
   }
 
@@ -78,7 +87,10 @@ class MySidebarProvider {
           <html>
           <body>
               <h2>Data from ${url}</h2>
-              <pre>${data}</pre>
+              <pre><span style="font-size: 16px;">
+              ${data}
+
+              </span></pre>
           </body>
           </html>
       `;

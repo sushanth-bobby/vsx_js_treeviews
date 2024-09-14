@@ -1,98 +1,46 @@
-/*
-const path = require('path');
-const os = require('os');
-*/
-const https = require('https')
-const axios = require('axios').create({
-    httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-    })
-})
-
-
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
 
 // Local Requires
-const tv14_tdp = require("./src/treeview14.js"); //Tree View 9
+const tv14_tdp = require("./src/treeview14.js");
+const { handleLoginWebview, authToken } = require('./src/webview1.js');
 
-let authToken = null;
+const wv2_dp = require("./src/webview2.js"); //Webview 2
+const wv3_dp = require("./src/webview3.js"); //Webview 3
+
+// statusbar
+const {startColorChangeInterval, snoozeColorChange,
+    deactivateColorChange } = require("./src/statusbar1.js")
+
+const wv4_dp = require("./src/webview4.js"); //Webview 4
+
+// Local Functions
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-
-/**
- * @param {vscode.ExtensionContext} context
- */
 function activate(context) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "js-treeviews" is now active!');
+    console.log('Congratulations, your extension "js-treeviews" is now active!');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('js-treeviews.helloWorld', function () {
-		// The code you place here will be executed every time your command is executed
+	// The commandId parameter must match the command field in package.json   
+    let disposable = vscode.commands.registerCommand('js-treeviews.helloWorld', function () {
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Hello World from js_TreeViews!');
+    });
+    context.subscriptions.push(disposable);
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from js_TreeViews!');
-	});
-	context.subscriptions.push(disposable);
-
-	//
+    // Treeview 14 - Webview 1
     const tvData14 = new tv14_tdp();
-    vscode.window.createTreeView('webviewLogin', { treeDataProvider: tvData14 });
+    vscode.window.createTreeView('wv1_id', { treeDataProvider: tvData14 });
 
     let tv14_dispos = vscode.commands.registerCommand('treeView14.itemClick', async (item) => {
-        console.log(`context.extensionUri=${context.extensionUri}`)
         if (item.label === 'Login') {
-            const panel = vscode.window.createWebviewPanel(
-                'loginWebview', 
-                'Login', 
-                vscode.ViewColumn.One, 
-                { enableScripts: true }
-            );
-
-            panel.webview.html = getLoginHtml(panel.webview, context.extensionUri);
-
-            panel.webview.onDidReceiveMessage(
-                async (message) => {
-                    if (message.command === 'login') {
-                        const { username, password } = message;
-						console.log(`username:${username}, password:${password}`)
-                        try {
-                            const response = await axios.post('http://localhost:3100/login', { username, password });
-                            console.log(`response.status=${response.status}`)
-                            if (response.status === 200) {
-                                vscode.window.showInformationMessage('Login successful!');
-                                // treeDataProvider.isLoggedIn = true;
-                                tvData14.refresh();
-                            } else {
-                                vscode.window.showErrorMessage('Login failed. Please try again.');
-                            }
-							
-                            authToken = response.data.token;
-                            vscode.window.showInformationMessage('Login successful!');
-                            panel.dispose();
-                        } catch (error) {
-                            vscode.window.showErrorMessage('Login failed! Could be server issues');
-                        }
-                    }
-                },
-                undefined,
-                context.subscriptions
-            );
+            handleLoginWebview(context, tvData14);
         } else if (authToken) {
             try {
-                /*
-                const response = await axios.get('https://example.com/api/protected', {
-                    headers: { Authorization: `Bearer ${authToken}` }
-                });*/
-                vscode.window.showInformationMessage(`Action successful! Data`);
+                vscode.window.showInformationMessage(`Action successful!`);
             } catch (error) {
                 vscode.window.showErrorMessage('Action failed! Please log in again.');
             }
@@ -102,64 +50,64 @@ function activate(context) {
     });
 
     context.subscriptions.push(tv14_dispos);
-	//
+
+    // Webview 2 - API Links
+    const wv1_register_dp = new wv2_dp(context);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider('wv2_id', wv1_register_dp)
+    );
+
+    // Webview 3 - Calico Colors
+    const wv2_register_dp = new wv3_dp(context.extensionUri);
+
+    context.subscriptions.push(
+     vscode.window.registerWebviewViewProvider(wv2_register_dp.viewType, wv2_register_dp)
+    );
+   
+    context.subscriptions.push(
+     vscode.commands.registerCommand('calicoColors.addColor', () => {
+      wv2_register_dp.addColor();
+     })
+    );
+   
+    context.subscriptions.push(
+     vscode.commands.registerCommand('calicoColors.clearColors', () => {
+      wv2_register_dp.clearColors();
+     })
+    );
+
+    // statusbar 1 - Color Change
+    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBarItem.text = '$(clock) Change Color';
+    statusBarItem.tooltip = 'Click to Snooze';
+    statusBarItem.show();
+
+    statusBarItem.command = 'extension.snoozeColorChange';
+    context.subscriptions.push(statusBarItem);
+
+    // Command to snooze the color change
+    const snoozeCommand = vscode.commands.registerCommand('extension.snoozeColorChange', () => {
+        snoozeColorChange(statusBarItem);
+    });
+
+    context.subscriptions.push(snoozeCommand);
+
+    startColorChangeInterval(statusBarItem)
+
+    // Webview 4 - Search & Highlight
+    const wv4_register_dp = new wv4_dp();    
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider('keywordHighlighterView', wv4_register_dp)
+    );
+
 
 }
 
-// This method is called when your extension is deactivated
-function deactivate() {}
-
-
-// ------------------ Functions ------------------
-function getLoginHtml(webview, extensionUri) {
-    let styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'login.css'))
-    console.log(`styleUri=${styleUri}`)
-    return `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>Login Page</title>
-            <link rel="stylesheet" href="${styleUri}"> <!-- Link to the CSS file -->
-        </head>
-        <body>
-            <div class="container">
-                <h1>Enter admin:admin for testing login</h1>
-                <form>
-                    <input type="text" placeholder="racf" id="username" name="username">
-                    <input type="password" placeholder="password" id="password" name="password">
-                    <button type="submit" onclick="login()">Sign in</button>
-
-                    <!-- div class="or-divider">or</div -->
-
-                    <div class="agreement">
-                        if credentials fail, do not retry, validate it outside vscode
-                    </div>
-                </form>
-            </div>
-            <script>
-                const vscode = acquireVsCodeApi();
-
-                function login() {
-                    const username = document.getElementById('username').value;
-                    const password = document.getElementById('password').value;
-
-                    vscode.postMessage({
-                        command: 'login',
-                        username,
-                        password
-                    });
-                }
-            </script>
-
-        </body>
-        </html>
-    `;
+function deactivate() {
+    deactivateColorChange();
 }
-
-
 
 module.exports = {
-	activate,
-	deactivate
-}
+    activate,
+    deactivate
+};

@@ -17,8 +17,7 @@ const vscode = require('vscode');
 
 
 // Local Requires
-const sb1_sbp3 = require("./src/sidebar13.js"); //Sidebar 1
-
+const wv2_dp = require("./src/webview2.js"); 
 
 
 // This method is called when your extension is activated
@@ -79,9 +78,9 @@ function activate(context) {
     );
 */
 
-    const mySidebarProvider = new sb1_sbp3(context);
+    const wv1_register_dp = new wv2_dp(context);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider('mySidebarView', mySidebarProvider)
+        vscode.window.registerWebviewViewProvider('wv1_id', wv1_register_dp)
     );
 
 	//

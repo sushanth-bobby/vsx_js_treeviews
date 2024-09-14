@@ -18,33 +18,68 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "treeview-examples",
-          "title": "Tree view Examples",
-          "icon": "media/dep.svg"
+          "id": "ab_webview",
+          "title": "Webview Testings",
+          "icon": "media/twitter.svg"
         }
       ]
     },
     "views": {
-      "treeview-examples": [
+      "ab_webview": [
         {
-          "id": "treeView9",
-          "name": "Tree View 9 - File EXplorer",
-          "contextualTitle": "Example 9"
-        }
+          "id": "wv1_id",
+          "name": "Login",
+          "contextualTitle": "Webview 1"
+        },        
+        {
+          "id": "wv2_id",
+          "name": "API Links",
+          "type": "webview",
+          "contextualTitle": "Webview 2"
+        },
+				{
+					"type": "webview",
+					"id": "calicoColors.colorsView",
+					"name": "Calico Colors"
+				},
+        {
+          "type": "webview",
+          "id": "keywordHighlighterView",
+          "name": "Keyword Search"
+        }        
       ],
-      "explorer": [ 
-        {
-          "id": "webviewLogin",
-          "name": "Login"
-        }
-      ]
+      "explorer": [ ]
     },
     "commands": [
       {
         "command": "treeView14.itemClick",
         "title": "Click Item"
+      },
+			{
+				"command": "calicoColors.addColor",
+				"category": "Calico Colors",
+				"title": "Add Color"
+			},
+			{
+				"command": "calicoColors.clearColors",
+				"category": "Calico Colors",
+				"title": "Clear Colors",
+				"icon": "$(clear-all)"
+			},
+      {
+        "command": "keywordHighlighter.start",
+        "title": "Keyword Highlighter"
       }      
-    ]
+    ],
+		"menus": {
+			"view/title": [
+				{
+					"command": "calicoColors.clearColors",
+					"group": "navigation",
+					"when": "view == calicoColors.colorsView"
+				}
+			]
+		}
   },
   "scripts": {
     "lint": "eslint .",

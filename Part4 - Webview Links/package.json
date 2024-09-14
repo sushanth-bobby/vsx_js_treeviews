@@ -18,17 +18,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "mySidebar",
-          "title": "My Sidebar",
+          "id": "ab_webview",
+          "title": "Webview Testings",
           "icon": "media/twitter.svg"
         }
       ]
     },
     "views": {
-      "mySidebar": [
+      "ab_webview": [
         {
-          "id": "mySidebarView",
-          "name": "My Links",
+          "id": "wv1_id",
+          "name": "API Links",
           "type": "webview"
         }
       ],
