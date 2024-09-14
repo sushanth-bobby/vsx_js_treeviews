@@ -48,9 +48,10 @@
           "name": "Keyword Search"
         },
         {
-          "id": "foldingSidebar",
-          "name": "Folding Sidebar"
-        }
+          "type": "webview",
+          "id": "showLinesSidebar",
+          "name": "Show Lines"
+        }        
       ],
       "explorer": [ ]
     },
@@ -71,13 +72,9 @@
 				"icon": "$(clear-all)"
 			},
       {
-        "command": "keywordHighlighter.start",
-        "title": "Keyword Highlighter"
-      },
-      {
-        "command": "extension.openSidebar",
-        "title": "Open Folding Sidebar"
-      }      
+        "command": "extension.showLinesSidebar",
+        "title": "Show Lines Sidebar"
+      }
     ],
 		"menus": {
 			"view/title": [

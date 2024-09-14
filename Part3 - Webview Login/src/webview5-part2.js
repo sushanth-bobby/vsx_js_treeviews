@@ -18,15 +18,10 @@ class SidebarProvider {
 
         // Handle messages from the webview
         webviewView.webview.onDidReceiveMessage(message => {
-            if (message.command === 'addKeyword') {
+            if (message.command === 'filterLines') {
+                // Add the keyword to the list and update the webview content
                 this.keywords.push(message.text);
                 this.updateWebview();
-                filterDocumentLines(this.keywords);
-            } else if (message.command === 'removeKeyword') {
-                this.keywords = this.keywords.filter(keyword => keyword !== message.text);
-                this.updateWebview();
-                filterDocumentLines(this.keywords);
-            } else if (message.command === 'searchWithCurrentKeywords') {
                 filterDocumentLines(this.keywords);
             }
         });
@@ -34,12 +29,7 @@ class SidebarProvider {
 
     // Update the webview content dynamically to show the list of keywords
     updateWebview() {
-        const keywordList = this.keywords.map(keyword => `
-            <li>
-                ${keyword}
-                <button onclick="removeKeyword('${keyword}')">Remove</button>
-            </li>
-        `).join('');
+        const keywordList = this.keywords.map(keyword => `<li>${keyword}</li>`).join('');
         const newContent = `
             <!DOCTYPE html>
             <html lang="en">
@@ -47,33 +37,19 @@ class SidebarProvider {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Show Lines</title>
-                <style>
-                    button {
-                        margin-left: 10px;
-                    }
-                </style>
             </head>
             <body>
-                <h3>Copy lines containing keywords to new document</h3>
+                <h1>Filter Lines in Active Document</h1>
                 <input type="text" id="keyword" placeholder="Enter keyword" />
                 <button id="execute">Show Lines</button>
                 <h3>Keywords:</h3>
                 <ul>${keywordList}</ul>
                 <script>
                     const vscode = acquireVsCodeApi();
-
                     document.getElementById('execute').addEventListener('click', () => {
                         const keyword = document.getElementById('keyword').value;
-                        if (keyword) {
-                            vscode.postMessage({ command: 'addKeyword', text: keyword });
-                        } else {
-                            vscode.postMessage({ command: 'searchWithCurrentKeywords' });
-                        }
+                        vscode.postMessage({ command: 'filterLines', text: keyword });
                     });
-
-                    function removeKeyword(keyword) {
-                        vscode.postMessage({ command: 'removeKeyword', text: keyword });
-                    }
                 </script>
             </body>
             </html>
@@ -90,11 +66,6 @@ class SidebarProvider {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Show Lines</title>
-                <style>
-                    button {
-                        margin-left: 10px;
-                    }
-                </style>
             </head>
             <body>
                 <h1>Filter Lines in Active Document</h1>
@@ -104,19 +75,10 @@ class SidebarProvider {
                 <ul></ul>
                 <script>
                     const vscode = acquireVsCodeApi();
-
                     document.getElementById('execute').addEventListener('click', () => {
                         const keyword = document.getElementById('keyword').value;
-                        if (keyword) {
-                            vscode.postMessage({ command: 'addKeyword', text: keyword });
-                        } else {
-                            vscode.postMessage({ command: 'searchWithCurrentKeywords' });
-                        }
+                        vscode.postMessage({ command: 'filterLines', text: keyword });
                     });
-
-                    function removeKeyword(keyword) {
-                        vscode.postMessage({ command: 'removeKeyword', text: keyword });
-                    }
                 </script>
             </body>
             </html>

@@ -13,7 +13,8 @@ const {startColorChangeInterval, snoozeColorChange,
     deactivateColorChange } = require("./src/statusbar1.js")
 
 const wv4_dp = require("./src/webview4.js"); //Webview 4
-const wv5_dp = require("./src/webview5.js"); //Webview 5
+// const wv5_dp = require("./src/webview5.js"); //Webview 5
+const SidebarProvider = require('./src/webview5.js'); // Adjust path if necessary
 
 // Local Functions
 
@@ -77,6 +78,7 @@ function activate(context) {
      })
     );
 
+/*    
     // statusbar 1 - Color Change
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = '$(clock) Change Color';
@@ -94,6 +96,7 @@ function activate(context) {
     context.subscriptions.push(snoozeCommand);
 
     startColorChangeInterval(statusBarItem)
+*/
 
     // Webview 4 - Search & Highlight
     const wv4_register_dp = new wv4_dp();    
@@ -102,18 +105,21 @@ function activate(context) {
     );
 
     // Webview 5 - Show and Exclude 
-    const wv5_register_dp = new wv5_dp(context.extensionUri);
-
+    // Create an instance of SidebarProvider and register it
+    const sidebarProvider = new SidebarProvider(context);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(wv5_register_dp.viewType, wv5_register_dp)
+        vscode.window.registerWebviewViewProvider(
+            'showLinesSidebar', // This ID must match the view ID in package.json
+            sidebarProvider
+        )
     );
 
-    context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openSidebar', () => {
-            // No need to call createOrShow; registration is automatic with the view provider
-        })
-    );    
+    // Register a command to open the sidebar manually (if needed)
+    let disposable2 = vscode.commands.registerCommand('extension.showLinesSidebar', () => {
+        vscode.window.showInformationMessage('Sidebar Opened');
+    });
 
+    context.subscriptions.push(disposable2);
 }
 
 function deactivate() {
