@@ -46,7 +46,11 @@
           "type": "webview",
           "id": "keywordHighlighterView",
           "name": "Keyword Search"
-        }        
+        },
+        {
+          "id": "foldingSidebar",
+          "name": "Folding Sidebar"
+        }
       ],
       "explorer": [ ]
     },
@@ -69,6 +73,10 @@
       {
         "command": "keywordHighlighter.start",
         "title": "Keyword Highlighter"
+      },
+      {
+        "command": "extension.openSidebar",
+        "title": "Open Folding Sidebar"
       }      
     ],
 		"menus": {

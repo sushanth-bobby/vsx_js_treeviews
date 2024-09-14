@@ -27,10 +27,6 @@ class KeywordHighlighterView {
               const { keyword, newColor } = message;
               this.changeKeywordColor(keyword, newColor);
               this.updateWebview(webviewView.webview);
-          } else if (message.command === 'removeKeyword') {
-              const keyword = message.keyword;
-              this.removeKeywordHighlight(keyword);
-              this.updateWebview(webviewView.webview);
           }
       });
   }
@@ -67,9 +63,8 @@ class KeywordHighlighterView {
                       keywords.forEach(({ keyword, color }) => {
                           const keywordDiv = document.createElement('div');
                           keywordDiv.innerHTML = \`
-                              <span style="background-color: \${color}; color: \${getContrastingTextColor(color)}; padding: 3px;">\${keyword}</span>
+                              <span style="background-color: \${color}; padding: 3px;">\${keyword}</span>
                               <input type="color" value="\${color}" />
-                              <button id="remove-\${keyword}">Remove</button>
                           \`;
 
                           // Handle color change
@@ -81,27 +76,9 @@ class KeywordHighlighterView {
                               });
                           });
 
-                          // Handle keyword removal
-                          keywordDiv.querySelector('button').addEventListener('click', () => {
-                              vscode.postMessage({
-                                  command: 'removeKeyword',
-                                  keyword: keyword
-                              });
-                          });
-
                           listDiv.appendChild(keywordDiv);
                       });
                   });
-
-                  // Function to calculate contrasting text color
-                  function getContrastingTextColor(backgroundColor) {
-                      const color = backgroundColor.substring(1); // remove "#"
-                      const r = parseInt(color.substring(0, 2), 16);
-                      const g = parseInt(color.substring(2, 4), 16);
-                      const b = parseInt(color.substring(4, 6), 16);
-                      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                      return brightness > 125 ? 'black' : 'white';
-                  }
               </script>
           </body>
           </html>`;
@@ -132,28 +109,13 @@ class KeywordHighlighterView {
           keywordRanges.push(range);
       }
 
-      // Highlight the ranges in the editor with the given color and contrasting text
+      // Highlight the ranges in the editor with the given color
       const decorationType = vscode.window.createTextEditorDecorationType({
-          backgroundColor: color,
-          color: this.getContrastingTextColor(color)
+          backgroundColor: color
       });
 
       this.keywordDecorations[keyword] = decorationType;
       activeEditor.setDecorations(decorationType, keywordRanges);
-  }
-
-  // Remove keyword highlight
-  removeKeywordHighlight(keyword) {
-      const activeEditor = vscode.window.activeTextEditor;
-      if (!activeEditor || !this.keywordDecorations[keyword]) return;
-
-      // Remove the decoration for the keyword
-      const decorationType = this.keywordDecorations[keyword];
-      activeEditor.setDecorations(decorationType, []); // Clear the decorations
-
-      // Remove the keyword from tracking
-      this.keywords = this.keywords.filter(k => k.keyword !== keyword);
-      delete this.keywordDecorations[keyword];
   }
 
   // Change the color of a highlighted keyword
@@ -184,16 +146,7 @@ class KeywordHighlighterView {
       }
       return color;
   }
-
-  // Calculate contrasting text color (black or white) based on background color brightness
-  getContrastingTextColor(backgroundColor) {
-      const color = backgroundColor.substring(1); // remove "#"
-      const r = parseInt(color.substring(0, 2), 16);
-      const g = parseInt(color.substring(2, 4), 16);
-      const b = parseInt(color.substring(4, 6), 16);
-      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-      return brightness > 125 ? 'black' : 'white';
-  }
 }
+
 
 module.exports = KeywordHighlighterView;

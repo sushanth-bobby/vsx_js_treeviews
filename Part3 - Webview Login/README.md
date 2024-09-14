@@ -66,3 +66,10 @@ You can author your README using Visual Studio Code.  Here are some useful edito
 
 
 (VSCode inbuilt icon)[https://code.visualstudio.com/api/references/icons-in-labels]
+
+
+Can you write a vscode extension using nodejs in the sidebar webview there should be a textbox and an "execute" button. 
+
+When user gives input like "show running", from the active document, it should fold all the lines except the lines having keyword "running"
+
+If the input is like "exclude running", in this case, it should fold all the lines having keyword "running"

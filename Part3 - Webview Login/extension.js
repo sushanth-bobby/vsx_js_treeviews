@@ -13,6 +13,7 @@ const {startColorChangeInterval, snoozeColorChange,
     deactivateColorChange } = require("./src/statusbar1.js")
 
 const wv4_dp = require("./src/webview4.js"); //Webview 4
+const wv5_dp = require("./src/webview5.js"); //Webview 5
 
 // Local Functions
 
@@ -100,6 +101,18 @@ function activate(context) {
         vscode.window.registerWebviewViewProvider('keywordHighlighterView', wv4_register_dp)
     );
 
+    // Webview 5 - Show and Exclude 
+    const wv5_register_dp = new wv5_dp(context.extensionUri);
+
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(wv5_register_dp.viewType, wv5_register_dp)
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('extension.openSidebar', () => {
+            // No need to call createOrShow; registration is automatic with the view provider
+        })
+    );    
 
 }
 
