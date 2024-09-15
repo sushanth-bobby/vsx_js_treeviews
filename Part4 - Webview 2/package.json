@@ -49,12 +49,14 @@
         "title": "Open API Sidebar"
       },
       {
-        "command": "notepad.addNote",
-        "title": "Add Note"
+        "command": "notepad.addNote",        
+        "title": "Add Note",
+        "icon": "$(plus)"
       },
       {
         "command": "notepad.openNote",
-        "title": "Open Note"
+        "title": "Open Note",
+        "icon": "$(file-code)"
       }
     ],
     "menus": {

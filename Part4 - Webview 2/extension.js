@@ -20,8 +20,8 @@ const vscode = require('vscode');
 const wv6_dp = require("./src/webview6.js"); //webview 6
 const wv7_dp = require("./src/webview7.js"); //webview 7
 
-const NotepadProvider = require('./src/notepadProvider.js');
-const WebviewManager = require('./src/webviewManager.js');
+const tv15_dp = require('./src/treeview15.js');
+const wv8_dp = require('./src/webview8.js');
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -59,23 +59,23 @@ function activate(context) {
     );
 
 	// webview8, treeview15
-    const notepadProvider = new NotepadProvider();
-    const webviewManager = new WebviewManager(context);
+    const tv15Data = new tv15_dp();
+    const wv8Data = new wv8_dp(context);
   
-    vscode.window.registerTreeDataProvider('notepadView', notepadProvider);
+    vscode.window.registerTreeDataProvider('notepadView', tv15Data);
   
     // Command to add a new note
     const addNoteCommand = vscode.commands.registerCommand('notepad.addNote', () => {
       vscode.window.showInputBox({ prompt: 'Enter note name' }).then(noteName => {
         if (noteName) {
-          notepadProvider.addNote(noteName);
+          tv15Data.addNote(noteName);
         }
       });
     });
   
     // Command to open the note in a webview
     const openNoteCommand = vscode.commands.registerCommand('notepad.openNote', (note) => {
-      webviewManager.openNoteWebview(note);
+      wv8Data.openNoteWebview(note);
     });
   
     context.subscriptions.push(addNoteCommand);

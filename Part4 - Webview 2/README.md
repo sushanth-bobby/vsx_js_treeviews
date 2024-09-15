@@ -67,3 +67,11 @@ You can author your README using Visual Studio Code.  Here are some useful edito
 https://code.visualstudio.com/api/ux-guidelines/overview
 https://dev.to/estruyf/devhack-open-custom-vscode-webview-panel-and-focus-input-3i92
 https://code.visualstudio.com/api/ux-guidelines/webviews
+https://code.visualstudio.com/api/extension-capabilities/common-capabilities
+https://medium.com/@ashleyluu87/data-flow-from-vs-code-extension-webview-panel-react-components-2f94b881467e
+https://code.visualstudio.com/api/references/icons-in-labels
+
+https://stackoverflow.com/questions/51821924/how-to-persist-information-for-a-vscode-extension
+https://stackoverflow.com/questions/65963955/how-to-store-data-for-each-user-vscode-extention
+
+https://github.com/markedjs/marked
