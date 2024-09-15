@@ -88,7 +88,7 @@ class SidebarProvider {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Show Lines</title>
+                <title>Filter Lines</title>
                 <link rel="stylesheet" href="${styleUri}"> <!-- Link to the CSS file -->
             </head>
             <body>
@@ -147,11 +147,11 @@ class SidebarProvider {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Show Lines</title>
+                <title>Filter Lines</title>
                 <link rel="stylesheet" href="${styleUri}"> <!-- Link to the CSS file -->
             </head>
             <body>
-                <h1>Filter Lines in Active Document</h1>
+                <h3>Filter Lines in Active Document</h3>
                 <input type="text" id="keyword" placeholder="Enter keyword" />
 
                 <div class="switch-container"> <!-- OFF-Show, ON-Exclude -->
@@ -163,7 +163,7 @@ class SidebarProvider {
                     <label class="switch-label switch-label-on" id="label-on-1" for="toggle1">EXCLUDE</label>
                 </div>
 
-                <button class="primary" id="execute">Show Lines</button>
+                <button class="primary" id="execute">Filter Lines</button>
                 <h3>Keywords:</h3>
                 <ul></ul>
                 <script>

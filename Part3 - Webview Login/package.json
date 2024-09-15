@@ -50,7 +50,7 @@
         {
           "type": "webview",
           "id": "showLinesSidebar",
-          "name": "Show Lines"
+          "name": "Filter Lines"
         }        
       ],
       "explorer": [ ]
@@ -73,7 +73,7 @@
 			},
       {
         "command": "extension.showLinesSidebar",
-        "title": "Show Lines Sidebar"
+        "title": "Filter Lines"
       }
     ],
 		"menus": {

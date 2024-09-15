@@ -27,9 +27,18 @@
     "views": {
       "ab_webview": [
         {
-          "id": "wv1_id",
-          "name": "API Links",
+          "id": "wv6_id",
+          "name": "Gitlens Clone - Get Started",
           "type": "webview"
+        },
+        {
+          "id": "wv7_id",
+          "name": "Gitlens Clone - No Repo",
+          "type": "webview"
+        },
+        {
+          "id": "notepadView",
+          "name": "NOTEPAD"
         }
       ],
       "explorer": [ ]
@@ -38,8 +47,32 @@
       {
         "command": "extension.openSidebar",
         "title": "Open API Sidebar"
-      }      
-    ]
+      },
+      {
+        "command": "notepad.addNote",
+        "title": "Add Note"
+      },
+      {
+        "command": "notepad.openNote",
+        "title": "Open Note"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "notepad.addNote",
+          "when": "view == notepadView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "notepad.openNote",
+          "when": "view == notepadView",
+          "group": "inline"
+        }
+      ]      
+    }
   },
   "scripts": {
     "lint": "eslint .",

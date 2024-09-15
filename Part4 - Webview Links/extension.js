@@ -17,8 +17,11 @@ const vscode = require('vscode');
 
 
 // Local Requires
-const wv2_dp = require("./src/webview2.js"); 
+const wv6_dp = require("./src/webview6.js"); //webview 6
+const wv7_dp = require("./src/webview7.js"); //webview 7
 
+const NotepadProvider = require('./src/notepadProvider.js');
+const WebviewManager = require('./src/webviewManager.js');
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -43,47 +46,40 @@ function activate(context) {
 	});
 	context.subscriptions.push(disposable);
 
-	//
-    // Sidebar - Twitter
-    /*
-    const sbp1 = new sb1_sbp(context.extensionUri);
+    // webview6 - GitLens Setups
+    const wv6_register_dp = new wv6_dp(context);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider('sidebar1', sbp1)
+        vscode.window.registerWebviewViewProvider('wv6_id', wv6_register_dp)
     );
 
+    // webview7 - GitLens No Repo
+    const wv7_register_dp = new wv7_dp(context);
     context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openLink', async (url) => {
-            try {
-                const response = await axios.get(url);
-                const panel = vscode.window.createWebviewPanel(
-                    'dataView', 
-                    'Data View', 
-                    vscode.ViewColumn.Beside, 
-                    {}
-                );
-                panel.webview.html = `<pre>${response.data}</pre>`;
-            } catch (error) {
-                vscode.window.showErrorMessage('Failed to fetch data from the URL');
-            }
-        })
-    );    
-    */
-   /*
-      // Register command to open sidebar webview
-    context.subscriptions.push(
-        vscode.commands.registerCommand('extension.openSidebar', () => {
-            console.log("Executing sb1_sbp2")
-            sb1_sbp2.register(context);
-        })
-    );
-*/
-
-    const wv1_register_dp = new wv2_dp(context);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider('wv1_id', wv1_register_dp)
+        vscode.window.registerWebviewViewProvider('wv7_id', wv7_register_dp)
     );
 
-	//
+	// webview8, treeview15
+    const notepadProvider = new NotepadProvider();
+    const webviewManager = new WebviewManager(context);
+  
+    vscode.window.registerTreeDataProvider('notepadView', notepadProvider);
+  
+    // Command to add a new note
+    const addNoteCommand = vscode.commands.registerCommand('notepad.addNote', () => {
+      vscode.window.showInputBox({ prompt: 'Enter note name' }).then(noteName => {
+        if (noteName) {
+          notepadProvider.addNote(noteName);
+        }
+      });
+    });
+  
+    // Command to open the note in a webview
+    const openNoteCommand = vscode.commands.registerCommand('notepad.openNote', (note) => {
+      webviewManager.openNoteWebview(note);
+    });
+  
+    context.subscriptions.push(addNoteCommand);
+    context.subscriptions.push(openNoteCommand);  
 
 }
 

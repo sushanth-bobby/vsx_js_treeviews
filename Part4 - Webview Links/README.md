@@ -63,3 +63,7 @@ You can author your README using Visual Studio Code.  Here are some useful edito
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
+
+https://code.visualstudio.com/api/ux-guidelines/overview
+https://dev.to/estruyf/devhack-open-custom-vscode-webview-panel-and-focus-input-3i92
+https://code.visualstudio.com/api/ux-guidelines/webviews
