@@ -1,4 +1,4 @@
-// New Document is opened only once
+// New document is opened each time "Execute" is clicked
 
 const vscode = require("vscode");
 
@@ -7,7 +7,6 @@ class SidebarProvider {
         this.context = context;
         this.keywords = []; // Store the keywords entered by the user
         this.isShowMode = true; // Default to "SHOW" mode
-        this.openedDocument = null; // Track the opened document
     }
 
     resolveWebviewView(webviewView) {
@@ -42,31 +41,9 @@ class SidebarProvider {
     // Execute the appropriate filter function based on the toggle state
     async executeFilterFunction() {
         if (this.isShowMode) {
-            await this.updateLines(matchingLines);
+            await matchingLines(this.keywords);
         } else {
-            await this.updateLines(nonMatchingLines);
-        }
-    }
-
-    // Open or update the document based on the current state
-    async updateLines(filterFunction) {
-        if (this.openedDocument) {
-            // Update existing document
-            const document = this.openedDocument;
-            const editor = await vscode.window.showTextDocument(document);
-            const content = await filterFunction(this.keywords, document);
-            const edit = new vscode.WorkspaceEdit();
-            edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), content);
-            await vscode.workspace.applyEdit(edit);
-        } else {
-            // Open a new document
-            const content = await filterFunction(this.keywords);
-            const newDocument = await vscode.workspace.openTextDocument({
-                content: content,
-                language: vscode.window.activeTextEditor.document.languageId
-            });
-            this.openedDocument = newDocument;
-            await vscode.window.showTextDocument(newDocument);
+            await nonMatchingLines(this.keywords);
         }
     }
 
@@ -190,58 +167,76 @@ class SidebarProvider {
 }
 
 // Function to filter lines by multiple keywords and copy matching lines to a new document
-async function matchingLines(keywords, document) {
+async function matchingLines(keywords) {
     const editor = vscode.window.activeTextEditor;
 
     if (!editor) {
         vscode.window.showInformationMessage('No active editor');
-        return '';
+        return;
     }
 
-    const { document: activeDocument } = editor;
-    const totalLines = activeDocument.lineCount;
+    const { document } = editor;
+    const totalLines = document.lineCount;
     const matchingLines = [];
 
     // Iterate over the lines and collect the ones that match any of the keywords
     for (let i = 0; i < totalLines; i++) {
-        const line = activeDocument.lineAt(i);
+        const line = document.lineAt(i);
         if (keywords.some(keyword => line.text.includes(keyword))) {
             matchingLines.push(line.text);
         }
     }
 
-    return matchingLines.join("\n");
+    // Open a new untitled document and copy the matching lines to it
+    if (matchingLines.length > 0) {
+        const newDocument = await vscode.workspace.openTextDocument({
+            content: matchingLines.join("\n"),
+            language: document.languageId
+        });
+        vscode.window.showTextDocument(newDocument);
+    } else {
+        vscode.window.showInformationMessage('No lines matched the keywords.');
+    }
 }
 
 // Function to filter lines by multiple keywords and copy non-matching lines to a new document
-async function nonMatchingLines(keywords, document) {
+async function nonMatchingLines(keywords) {
     const editor = vscode.window.activeTextEditor;
 
     if (!editor) {
         vscode.window.showInformationMessage('No active editor');
-        return '';
+        return;
     }
 
-    const { document: activeDocument } = editor;
-    const totalLines = activeDocument.lineCount;
+    const { document } = editor;
+    const totalLines = document.lineCount;
     const nonMatchingLines = [];
 
     // Iterate over the lines and collect the ones that do not match any of the keywords
     for (let i = 0; i < totalLines; i++) {
-        const line = activeDocument.lineAt(i);
+        const line = document.lineAt(i);
         if (!keywords.some(keyword => line.text.includes(keyword))) {
             nonMatchingLines.push(line.text);
         }
     }
 
-    return nonMatchingLines.join("\n");
+    // Open a new untitled document and copy the non-matching lines to it
+    if (nonMatchingLines.length > 0) {
+        const newDocument = await vscode.workspace.openTextDocument({
+            content: nonMatchingLines.join("\n"),
+            language: document.languageId
+        });
+        vscode.window.showTextDocument(newDocument);
+    } else {
+        vscode.window.showInformationMessage('All lines matched the keywords.');
+    }
 }
 
 function getNonce() {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     for (let i = 0; i < 32; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+     text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
 }
